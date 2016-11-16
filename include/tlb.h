@@ -2,18 +2,22 @@
 #define _TLB_H
 
 #include "types.h"
+#include <stdio.h>
 
-#define TLB_SIZE 16
 
 typedef struct {
-	PageNumber pageNumber;
-	FrameNumber frameNumber;
-	ValidBit validBit;
+	PageNumber page_number;
+	FrameNumber frame_number;
+	ValidBit valid_bit;
+	time_t last_used;
 } TLBEntry;
 
 typedef struct {
-	TLBEntry table[TLB_SIZE];
+	TLBEntry table[TLB_ENTRIES];
 } TLB;
+
+
+
 
 
 
