@@ -1,5 +1,7 @@
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef _PARSER_H
+#define _PARSER_H
+
+#include "types.h"
 
 #include <stdio.h>
 #include <stdint.h>

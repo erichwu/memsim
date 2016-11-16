@@ -26,8 +26,3 @@ void address_print(Address address) {
          address.offset);
 }
 
-int main() {
-  Address address;
-  address_init(&address, 0x11223456);
-  address_print(address);
-}

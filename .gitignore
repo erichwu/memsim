@@ -1,5 +1,4 @@
-.o
-.md
-.txt
-msim
-
+*.o
+*.md
+*.txt
+memsim

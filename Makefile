@@ -1,6 +1,6 @@
 SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)
-MAIN=msim
+MAIN=memsim
 INCLUDE=include
 
 all: $(OBJECTS)

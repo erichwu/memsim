@@ -2,7 +2,9 @@
 #define _TLB_H
 
 #include "types.h"
+
 #include <stdio.h>
+#include <time.h>
 
 
 typedef struct {
