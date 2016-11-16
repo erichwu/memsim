@@ -3,7 +3,7 @@ OBJECTS=$(SOURCES:.c=.o)
 MAIN=memsim
 INCLUDE=include
 
-all: $(OBJECTS)
+all: $(OBJECTS) $(INCLUDES)
 	gcc -o $(MAIN) $(EXECUTABLE) $(OBJECTS)
 
 .c.o:
