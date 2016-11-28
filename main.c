@@ -12,6 +12,6 @@ int main() {
   printf("Number of physical frames: %d\n", FRAME_COUNT);
   printf("Physical memory size: %d bytes\n", PHYSICAL_MEMORY_SIZE);
   Address address;
-  address_init(&address, 0x11223456);
+  address_init(&address, 22760);
   address_print(address);
 }

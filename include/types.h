@@ -33,7 +33,7 @@ typedef uint8_t PageNumber;
 typedef uint8_t FrameNumber;
 typedef uint8_t ValidBit;
 typedef uint8_t Offset;
-typedef char[FRAME_SIZE] FrameBlock;
+typedef char FrameBlock[FRAME_SIZE];
 
 /**
  * Address in a 16-bit format.
