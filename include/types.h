@@ -37,7 +37,6 @@ typedef uint8_t FrameNumber;
 typedef uint8_t ValidBit;
 typedef uint8_t Offset;
 typedef uint8_t FrameValue;
-typedef unsigned char FrameBlock[FRAME_SIZE];
 
 int tlb_misses;
 int page_misses;
@@ -51,5 +50,10 @@ typedef struct {
   PageNumber page_number;
   Offset offset;
 } Address;
+
+typedef struct {
+	FrameNumber frame_number;
+	Offset offset;
+} PhysicalAddress;
 
 #endif
