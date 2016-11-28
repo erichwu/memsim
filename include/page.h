@@ -7,14 +7,14 @@
 typedef struct {
 	/** Array of FrameNumbers */
 	FrameNumber table[PAGE_COUNT];
-
-} Pages;
+	uint8_t free_entry_pointer;
+} Page;
 
 /** Get the frame number or return PAGE_MISS*/
-FrameNumber frame_get(PageNumber page_number);
+int page_get(Page* page_table, PageNumber page_number, FrameNumber* frame_number);
 
 /** Intialize passed in page table to null */
-void pages_init(Pages* page_table); 
+void page_init(Page* page_table); 
 
 
 #endif

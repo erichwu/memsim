@@ -10,6 +10,9 @@
 /** SOMETHING_IS_WRONG unknown error (probably backing store error)*/
 #define SOMETHING_IS_WRONG -3
 
+#define FIFO 1
+#define LRU 2
+
 /** PHYSICAL_MEMORY_SIZE. */
 #define PHYSICAL_MEMORY_SIZE (1 << 16)
 /** PAGE_TABLE_SIZE. */
@@ -33,8 +36,12 @@ typedef uint8_t PageNumber;
 typedef uint8_t FrameNumber;
 typedef uint8_t ValidBit;
 typedef uint8_t Offset;
-typedef char FrameBlock[FRAME_SIZE];
+typedef uint8_t FrameValue;
+typedef unsigned char FrameBlock[FRAME_SIZE];
 
+int tlb_misses;
+int page_misses;
+int total_loads;
 /**
  * Address in a 16-bit format.
  *

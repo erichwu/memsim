@@ -1,13 +1,15 @@
-#include "parser.h"
+#include "parser.h" 
 #include "types.h"
+#include "tlb.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_ADDRESSES 1000
+#define MAX_ADDRESSES 100000
 #define TEST_FILE "testinput.txt"
 
 int main() {
+  tlb_misses = 0; page_misses = 0; total_loads = 0;
   printf("Welcome to Group 9's VM Simulator Version 1.0\n\n");
   printf("Number of logical pages: %d\n", PAGE_COUNT);
   printf("Page size: %d bytes\n", PAGE_SIZE);
@@ -22,6 +24,7 @@ int main() {
   int i;
   for (i = 0; i < read; i++) {
     address_print(addresses[i]);
+    total_loads++;
   }
 }
 
