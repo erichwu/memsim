@@ -7,7 +7,7 @@
 /** The Page Table Struct **/
 typedef struct {
 	/** Array of FrameNumbers */
-	PhysicalAddress* table[PAGE_COUNT];
+	FrameNumber* table[PAGE_COUNT];
 	uint8_t free_entry_pointer;
 	PhysicalMemory* main_memory;
 } Page;

@@ -63,7 +63,7 @@ int read_file(Address** addresses, int* read) {
   if (file_pointer == NULL) return -1;
 
   while ((line_length = getline(&line, &buf_length, file_pointer))  != -1) {
-    Address* address = malloc(sizeof(Address));
+    Address* address = malloc(sizeof(address));
     int bit_address = atoi(line);
     address_init(address, bit_address);
     stored[*read] = *address; 

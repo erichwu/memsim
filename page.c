@@ -15,12 +15,15 @@ int page_get(Page* page_table, Address address, FrameNumber* frame_number) {
 }
 
 int page_scan(Page* page_table, Address address, FrameNumber* frame_number) {
+	printf("address %p\n", &address);
+	printf("offset: %u\n", address.offset);
+	printf("page number: %u\n", address.page_number);
 	printf("Page scan called with address %u, %u\n", address.page_number, address.offset);
+	//printf("%p", page_table->table[0]);
 	printf("here1\n");
-	printf("Trying to request page number %x", address.offset);
-	if (page_table->table[address.page_number] != NULL) {
-		printf("here\n");
-		*frame_number = page_table->table[address.page_number]->frame_number;
+	if (&page_table->table[address.page_number] != NULL) {
+		printf("here2\n");
+		frame_number = page_table->table[address.page_number];
 		return 0;
 	}
 	printf("Page scan finished\n");
@@ -32,9 +35,9 @@ void page_init(Page* page_table, PhysicalMemory* main_memory) {
 	page_table = malloc(sizeof(Page));
 	int i;
 	for (i = 0; i < PAGE_TABLE_SIZE; i++) {
-		//page_table->table[i] = (PhysicalAddress*) malloc(sizeof(PhysicalAddress));
+		page_table->table[i] = malloc(sizeof(FrameNumber));
 		page_table->table[i] = NULL;
-		//printf("%p", &page_table->table[i]);
+		//printf("%u", i);
 	}
 	page_table->free_entry_pointer = 0;
 	page_table->main_memory = main_memory;
