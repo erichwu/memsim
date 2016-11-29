@@ -10,6 +10,8 @@
 
 TLB tlb;
 
+int combine_8_bit_numbers(uint8_t upper, uint8_t lower);
+
 void init() {
   tlb_init(&tlb);
 }
@@ -34,6 +36,7 @@ int main() {
   int i;
   for (i = 0; i < read; i++) {
     FrameValue frame_value;
+    printf("Looking up address, %u in tlb\n", combine_8_bit_numbers(addresses[i].page_number, addresses[i].offset));
     tlb_get(&tlb, addresses[i], mode, &frame_value);
     printf("Found frame value %u from address %u %u\n", frame_value, addresses[i].page_number, addresses[i].offset);
     total_loads++;
@@ -60,13 +63,20 @@ int read_file(Address** addresses, int* read) {
   if (file_pointer == NULL) return -1;
 
   while ((line_length = getline(&line, &buf_length, file_pointer))  != -1) {
-    Address address;
+    Address* address = malloc(sizeof(Address));
     int bit_address = atoi(line);
-    address_init(&address, bit_address);
-    stored[*read] = address; 
+    address_init(address, bit_address);
+    stored[*read] = *address; 
     (*read)++;
   }
   *addresses = stored;
 
   return 0;
+}
+
+int combine_8_bit_numbers(uint8_t upper, uint8_t lower) {
+  uint16_t upperByte = (uint16_t) upper;
+  uint16_t sixteenBitNumber = 256*upperByte + lower;
+  sixteenBitNumber = (upperByte<<8) | lower;
+  return sixteenBitNumber;
 }

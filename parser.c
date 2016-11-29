@@ -15,6 +15,7 @@ Offset offset(uint16_t address) {
 }
 
 void address_init(Address* address, uint32_t address_32_bit) {
+	//address = malloc(sizeof(Address));
   uint16_t address_16_bit = make_uint16_t(address_32_bit);
   address->page_number = page_number(address_16_bit);
   address->offset = offset(address_16_bit);

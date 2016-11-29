@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define BACKING_STORE_FILE "BACKING_STORE"
+
 void frame_block_init(FrameBlock* block) {
 	int i;
 	for (i = 0; i < FRAME_SIZE; i++) {
@@ -14,12 +16,19 @@ void frame_block_init(FrameBlock* block) {
 
 /** Initialize Memory members*/
 void memory_init(PhysicalMemory* memory) {
+	memory = malloc(sizeof(PhysicalMemory));
+	printf("Starting memory init\n");
 	memory->backing_store_pointer = fopen(BACKING_STORE_FILE, "r");
+  if (memory->backing_store_pointer == NULL) {
+  	printf("Backing store '%s' file is invalid\n", BACKING_STORE_FILE);
+  	exit(-1);
+  }
 	memory->backing_store_fd = fileno(memory->backing_store_pointer);
 	int i;
 	for (i = 0; i < FRAME_COUNT; i++) {
 		memory->table[i] = NULL;
 	}
+	printf("Finished memory init\n");
 }
 
 /** Return frame number of loaded memory after loading available position */
