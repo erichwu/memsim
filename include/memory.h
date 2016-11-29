@@ -7,7 +7,7 @@
 #define BACKING_STORE_FILE "BACKING_STORE"
 
 typedef struct {
-	uint8_t *table[FRAME_SIZE];
+	uint8_t* table[FRAME_SIZE];
 } FrameBlock;
 
 typedef struct {
@@ -24,7 +24,7 @@ void memory_init(PhysicalMemory* memory);
 int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number);
 
 /**  Get a value of a frame number with an offset*/
-int memory_get(FrameNumber frame_number, Offset offset, FrameValue* frame_value);
+int memory_get(PhysicalMemory* memory, FrameNumber frame_number, Offset offset, FrameValue* frame_value);
 
 /** Initialize a frame block*/
 void frame_block_init(FrameBlock* block);

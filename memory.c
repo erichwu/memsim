@@ -45,6 +45,11 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	return 0;
 }
 
-int memory_get(FrameNumber frame_number, Offset offset, FrameValue* frame_value) {
-	
+int memory_get(PhysicalMemory* memory, FrameNumber frame_number, Offset offset, FrameValue* frame_value) {
+	if(memory->table[frame_number] != NULL) {
+		//stuck here. How does a particular offset get a particular byte of the 256 bytes?
+		/*frame_value = memory->table[frame_number]->table[]*/ 
+		return 0;
+	} 
+	return SOMETHING_IS_WRONG;
 }
