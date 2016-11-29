@@ -47,8 +47,8 @@ int tlb_replace_fifo(TLB* tlb, Address address, FrameNumber frame_number) {
 	//TLB first in is initialized to 0 at start.
 	//So each time a new value comes in we want to increment it by one and then
 	//Replace the value at it this gives us the effect of FIFO.  
+	tlb_entry_init(tlb->table[tlb->first_in], address.page_number, frame_number);
 	tlb->first_in = ((tlb->first_in + 1) % TLB_ENTRIES); 
-	tlb_entry_init(tlb->table[tlb->first_in - 1], address.page_number, frame_number);
 	return 0;
 }
 
