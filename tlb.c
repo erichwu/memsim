@@ -35,7 +35,7 @@ int tlb_get(TLB* tlb, Address address, int mode, FrameValue* frame_value) {
 		exit(-1);
 	}
 	//Go to memory
-	if (memory_get(frame_number, address.offset, &frame_value) == SOMETHING_IS_WRONG) {
+	if (memory_get(frame_number, address.offset, frame_value) == SOMETHING_IS_WRONG) {
 		printf("Undefined physical memory issue\n");
 		exit(-1);
 	}

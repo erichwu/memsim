@@ -7,13 +7,14 @@
 #define BACKING_STORE_FILE "BACKING_STORE"
 
 typedef struct {
-	uint8_t table[FRAME_SIZE];
+	uint8_t *table[FRAME_SIZE];
 } FrameBlock;
 
 typedef struct {
 	FrameBlock* table[FRAME_COUNT]; 
 	uint8_t free_frame_pointer;
-	FILE* backing_store;
+	int backing_store_fd;
+	FILE* backing_store_pointer;
 } PhysicalMemory;
 
 /** Initialize Memory members*/
@@ -22,8 +23,10 @@ void memory_init(PhysicalMemory* memory);
 /** Return frame number of loaded memory after loading available position */
 int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number);
 
+/**  Get a value of a frame number with an offset*/
 int memory_get(FrameNumber frame_number, Offset offset, FrameValue* frame_value);
 
+/** Initialize a frame block*/
 void frame_block_init(FrameBlock* block);
 
 #endif

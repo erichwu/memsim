@@ -14,7 +14,8 @@ void frame_block_init(FrameBlock* block) {
 
 /** Initialize Memory members*/
 void memory_init(PhysicalMemory* memory) {
-	memory->backing_store = fopen(BACKING_STORE_FILE, "r");
+	memory->backing_store_pointer = fopen(BACKING_STORE_FILE, "r");
+	memory->backing_store_fd = fileno(memory->backing_store_pointer);
 	int i;
 	for (i = 0; i < FRAME_COUNT; i++) {
 		memory->table[i] = NULL;
@@ -23,11 +24,11 @@ void memory_init(PhysicalMemory* memory) {
 
 /** Return frame number of loaded memory after loading available position */
 int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number) {
-	if (lseek(memory->backing_store, offset, SEEK_SET) == -1) {
+	if (lseek(memory->backing_store_fd, offset, SEEK_SET) == -1) {
 		return SOMETHING_IS_WRONG;
 	}
-	char* byte;
-	if (fread(byte, FRAME_SIZE, 1, memory->backing_store) != FRAME_SIZE) {
+	char* byte[FRAME_SIZE];
+	if (fread(byte, FRAME_SIZE, 1, memory->backing_store_pointer) != FRAME_SIZE) {
 		return SOMETHING_IS_WRONG;
 	}
 	int i;
@@ -38,7 +39,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	FrameBlock* block = malloc(sizeof(FrameBlock));
 	frame_block_init(block);
 	for (i = 0; i < FRAME_SIZE; i++) {
-		block->table[i] = atoi(byte[i]);
+		block->table[i] = byte[i];
 	}
 	memory->table[*frame_number] = block;
 	return 0;
