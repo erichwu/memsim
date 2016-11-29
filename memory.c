@@ -24,7 +24,10 @@ void memory_init(PhysicalMemory* memory) {
 
 /** Return frame number of loaded memory after loading available position */
 int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number) {
-	if (lseek(memory->backing_store_fd, offset, SEEK_SET) == -1) {
+	//Offset is an n bit value. This can only represent 2^n values.
+	//That's fine. We can map the 2^n values to the 2^(2*n) values by doing
+	//FRAME_SIZE * offset 
+	if (lseek(memory->backing_store_fd, offset * FRAME_SIZE, SEEK_SET) == -1) {
 		return SOMETHING_IS_WRONG;
 	}
 	char* byte[FRAME_SIZE];
@@ -39,6 +42,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	FrameBlock* block = malloc(sizeof(FrameBlock));
 	frame_block_init(block);
 	for (i = 0; i < FRAME_SIZE; i++) {
+		//Loading a byte of data from the backing store into the frame block.
 		block->table[i] = byte[i];
 	}
 	memory->table[*frame_number] = block;
@@ -48,7 +52,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 int memory_get(PhysicalMemory* memory, FrameNumber frame_number, Offset offset, FrameValue* frame_value) {
 	if(memory->table[frame_number] != NULL) {
 		//stuck here. How does a particular offset get a particular byte of the 256 bytes?
-		/*frame_value = memory->table[frame_number]->table[]*/ 
+		frame_value = memory->table[frame_number]->table[offset]; //???????????????????????
 		return 0;
 	} 
 	return SOMETHING_IS_WRONG;

@@ -8,7 +8,14 @@
 #define MAX_ADDRESSES 100000
 #define TEST_FILE "testinput.txt"
 
+TLB tlb;
+
+void init() {
+  tlb_init(&tlb);
+}
+
 int main() {
+  init();
   tlb_misses = 0; page_misses = 0; total_loads = 0;
   printf("Welcome to Group 9's VM Simulator Version 1.0\n\n");
   printf("Number of logical pages: %d\n", PAGE_COUNT);
@@ -17,15 +24,24 @@ int main() {
   printf("TLB size: %d entries\n", TLB_ENTRIES);
   printf("Number of physical frames: %d\n", FRAME_COUNT);
   printf("Physical memory size: %d bytes\n", PHYSICAL_MEMORY_SIZE);
+  printf("Display Physical Addresses? [yes or no] \n");
+  printf("Choose TLB Replacement Strategy [1: FIFO, 2: LRU] \n");
+  int mode = 1;
   Address address;
   Address* addresses;
   int read;
   if (read_file(&addresses, &read) < 0) exit(1);
   int i;
   for (i = 0; i < read; i++) {
-    address_print(addresses[i]);
+    FrameValue frame_value;
+    tlb_get(&tlb, addresses[i], mode, &frame_value);
+    printf("Found frame value %u from address %u %u\n", frame_value, addresses[i].page_number, addresses[i].offset);
     total_loads++;
   }
+  double page_miss_percentage = (double) page_misses / (double) total_loads * 100;
+  double tlb_hit_rate = (double) (total_loads - tlb_misses) / (double) total_loads *100;
+  printf("Page fault rate: %.1f%%\n", page_miss_percentage);
+  printf("TLB hit rate: %.1f%%\n", tlb_hit_rate);
 }
 
 // read_file containing 32-bit addresses.
