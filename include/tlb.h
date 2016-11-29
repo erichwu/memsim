@@ -20,6 +20,7 @@ typedef struct {
 	TLBEntry* table[TLB_ENTRIES];
 	PhysicalMemory* main_memory;
 	Page* page_table;
+	int first_in;
 } TLB;
 
 void tlb_init(TLB* tlb);
