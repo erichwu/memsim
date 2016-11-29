@@ -6,10 +6,12 @@
 #include "stdio.h"
 #define BACKING_STORE_FILE "BACKING_STORE"
 
+/** The contents of a single "frame"*/
 typedef struct {
 	uint8_t* table[FRAME_SIZE];
 } FrameBlock;
 
+/** The physical memory which stores our blocks of data*/
 typedef struct {
 	FrameBlock* table[FRAME_COUNT]; 
 	uint8_t free_frame_pointer;

@@ -38,12 +38,13 @@ typedef uint8_t ValidBit;
 typedef uint8_t Offset;
 typedef uint8_t FrameValue;
 
+/** Stats for tracking performance*/
 int tlb_misses;
 int page_misses;
 int total_loads;
+
 /**
  * Address in a 16-bit format.
- *
  * Upper 8 bits are the page number and lower 8 bits are the offset.
  */
 typedef struct {
@@ -51,6 +52,10 @@ typedef struct {
   Offset offset;
 } Address;
 
+/**
+ * The PhysicalAddress struct
+ * Contains the frame_number and offset.
+ */
 typedef struct {
 	FrameNumber frame_number;
 	Offset offset;

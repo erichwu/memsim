@@ -24,6 +24,4 @@ void address_init(Address* address, uint32_t address_32_bit);
 /** address_print prints an Address. */
 void address_print(Address address);
 
-int main();
-
 #endif
