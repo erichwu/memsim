@@ -20,7 +20,7 @@ typedef struct {
 } PhysicalMemory;
 
 /** Initialize Memory members*/
-void memory_init(PhysicalMemory* memory);
+void memory_init(PhysicalMemory** memory);
 
 /** Return frame number of loaded memory after loading available position */
 int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number);
@@ -29,6 +29,6 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 int memory_get(PhysicalMemory* memory, FrameNumber frame_number, Offset offset, FrameValue* frame_value);
 
 /** Initialize a frame block*/
-void frame_block_init(FrameBlock* block);
+void frame_block_init(FrameBlock** block);
 
 #endif

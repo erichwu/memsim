@@ -7,28 +7,26 @@
 
 #define BACKING_STORE_FILE "BACKING_STORE"
 
-void frame_block_init(FrameBlock* block) {
+void frame_block_init(FrameBlock** block) {
 	int i;
 	for (i = 0; i < FRAME_SIZE; i++) {
-		block->table[i] = NULL;
+		(*block)->table[i] = NULL;
 	}
 }
 
 /** Initialize Memory members*/
-void memory_init(PhysicalMemory* memory) {
-	memory = malloc(sizeof(PhysicalMemory));
-	printf("Starting memory init\n");
-	memory->backing_store_pointer = fopen(BACKING_STORE_FILE, "r");
-  if (memory->backing_store_pointer == NULL) {
+void memory_init(PhysicalMemory** memory) {
+	(*memory) = malloc(sizeof(PhysicalMemory));
+	(*memory)->backing_store_pointer = fopen(BACKING_STORE_FILE, "r");
+  if ((*memory)->backing_store_pointer == NULL) {
   	printf("Backing store '%s' file is invalid\n", BACKING_STORE_FILE);
   	exit(-1);
   }
-	memory->backing_store_fd = fileno(memory->backing_store_pointer);
+	(*memory)->backing_store_fd = fileno((*memory)->backing_store_pointer);
 	int i;
 	for (i = 0; i < FRAME_COUNT; i++) {
-		memory->table[i] = NULL;
+		(*memory)->table[i] = NULL;
 	}
-	printf("Finished memory init\n");
 }
 
 /** Return frame number of loaded memory after loading available position */
@@ -40,7 +38,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 		return SOMETHING_IS_WRONG;
 	}
 	char* byte[FRAME_SIZE];
-	if (fread(byte, FRAME_SIZE, 1, memory->backing_store_pointer) != FRAME_SIZE) {
+	if (fread(byte, 1, FRAME_SIZE, memory->backing_store_pointer) != FRAME_SIZE) {
 		return SOMETHING_IS_WRONG;
 	}
 	int i;
@@ -49,7 +47,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	}
 	*frame_number = i;
 	FrameBlock* block = malloc(sizeof(FrameBlock));
-	frame_block_init(block);
+	frame_block_init(&block);
 	for (i = 0; i < FRAME_SIZE; i++) {
 		//Loading a byte of data from the backing store into the frame block.
 		block->table[i] = byte[i];

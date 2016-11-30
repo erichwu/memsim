@@ -18,7 +18,7 @@ int page_get(Page* page_table, Address address, FrameNumber* frame_number);
 int page_scan(Page* page_table, Address address, FrameNumber* frame_number);
 
 /** Intialize passed in page table to null */
-void page_init(Page* page_table, PhysicalMemory* main_memory); 
+void page_init(Page** page_table, PhysicalMemory* main_memory); 
 
 
 #endif

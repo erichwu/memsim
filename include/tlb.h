@@ -18,7 +18,7 @@ typedef struct {
 	PageNumber page_number;
 	FrameNumber frame_number;
 	ValidBit valid_bit;
-	time_t last_used;
+	int last_used;
 } TLBEntry;
 
 /**
@@ -35,7 +35,7 @@ typedef struct {
 } TLB;
 
 /** Initialize TLB members*/
-void tlb_init(TLB* tlb);
+void tlb_init(TLB** tlb);
 
 /** Scan for a particular page number in the TLB, return FrameNumber in frame_number parameter*/
 int tlb_scan(TLB* tlb, Address address, FrameNumber* frame_number);
@@ -60,6 +60,6 @@ int tlb_replace_fifo(TLB* tlb, Address address, FrameNumber frame_number);
 int tlb_replace_lru(TLB* tlb, Address address, FrameNumber frame_number);
 
 /** Initialize a TLBEntry with a provided page_number and frame_number*/
-void tlb_entry_init(TLBEntry* tlb_entry, PageNumber page_number, FrameNumber frame_number);
+void tlb_entry_init(TLBEntry** tlb_entry, PageNumber page_number, FrameNumber frame_number);
 
 #endif

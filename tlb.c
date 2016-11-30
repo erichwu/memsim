@@ -7,17 +7,21 @@
 #include <limits.h>
 
 int tlb_scan(TLB* tlb, Address address, FrameNumber* frame_number) {
-	printf("TLB scan called\n");
 	PageNumber search = address.page_number;
+	int found = 0;
 	int i;
 	for (i = 0; i < TLB_ENTRIES && tlb->table[i] != NULL; i++) {
 		if (tlb->table[i]->page_number == search) {
 			*frame_number = tlb->table[i]->frame_number; 
-			tlb->table[i]->last_used = time(NULL);
-			return 0;
+			tlb->table[i]->last_used = 0;
+			found = 1;
+		} else {
+			tlb->table[i]->last_used = tlb->table[i]->last_used + 1;
 		}
 	}
-	printf("TLB scan finished\n");
+	if(found == 1) {
+		return 0;
+	}
 	return TLB_MISS;
 }
 
@@ -35,13 +39,10 @@ int tlb_get(TLB* tlb, Address address, int mode, FrameValue* frame_value) {
 			exit(-1);
 		}
 		tlb_misses++;
-		printf("TLB MISS\n");
-		exit(-1);
-		printf("TLB get finished\n");
 	}
 	//Go to memory
 	if (memory_get(tlb->main_memory, frame_number, address.offset, frame_value) == SOMETHING_IS_WRONG) {
-		printf("Undefined physical memory issue\n");
+		printf("Undefined physical memory issue caught in tlb_get\n");
 		exit(-1);
 	}
 	return 0;
@@ -51,41 +52,42 @@ int tlb_replace_fifo(TLB* tlb, Address address, FrameNumber frame_number) {
 	//TLB first in is initialized to 0 at start.
 	//So each time a new value comes in we want to increment it by one and then
 	//Replace the value at it this gives us the effect of FIFO.  
-	printf("tlb repalce fifo called\n");
-	tlb_entry_init(tlb->table[tlb->first_in], address.page_number, frame_number);
+	tlb_entry_init(&tlb->table[tlb->first_in], address.page_number, frame_number);
 	tlb->first_in = ((tlb->first_in + 1) % TLB_ENTRIES); 
-	printf("tlb replace fifo finished\n");
 	return 0;
 }
 
 int tlb_replace_lru(TLB* tlb, Address address, FrameNumber frame_number) {
-	time_t lowest_time = UINT_MAX;
+	int oldest_time = INT_MIN;
 	int oldest_tlb = 0;
 	int i;
-	for (i = 0; i < TLB_ENTRIES && tlb->table[i] != NULL; i++) {
-		if (lowest_time > tlb->table[i]->last_used) {
+	for (i = 0; i < TLB_ENTRIES; i++) {
+		if(tlb->table[i] == NULL) {
 			oldest_tlb = i;
-			lowest_time = tlb->table[i]->last_used;
-		}
+			break;
+		}else if (oldest_time < tlb->table[i]->last_used) {
+			oldest_tlb = i;
+			oldest_time = tlb->table[i]->last_used;
+		} 
 	}
-	tlb_entry_init(tlb->table[oldest_tlb], oldest_tlb, frame_number);
+	tlb_entry_init(&tlb->table[oldest_tlb], address.page_number, frame_number);
 }
 
-void tlb_init(TLB* tlb) {
-	printf("TLB init started\n");
-	tlb = malloc(sizeof(TLB));
+void tlb_init(TLB** tlb) {
+	*tlb = (TLB*)malloc(sizeof(TLB));
+
 	int i;
 	for (i = 0; i < TLB_ENTRIES; i++) {
-		tlb->table[i] = NULL;
+		(*tlb)->table[i] = NULL;
 	}
-	tlb->first_in = 0;
-	memory_init(tlb->main_memory);
-	page_init(tlb->page_table, tlb->main_memory);
-	printf("TLB init ended\n");
+	(*tlb)->first_in = 0;
+	memory_init(&(*tlb)->main_memory);
+	page_init(&(*tlb)->page_table, (*tlb)->main_memory);
 }
 
-void tlb_entry_init(TLBEntry* tlb_entry, PageNumber page_number, FrameNumber frame_number) {
-	tlb_entry->page_number = page_number;
-	tlb_entry->frame_number = frame_number;
-	tlb_entry->last_used = time(NULL);
+void tlb_entry_init(TLBEntry** tlb_entry, PageNumber page_number, FrameNumber frame_number) {
+	*tlb_entry = (TLBEntry*) malloc(sizeof(TLBEntry));
+	(*tlb_entry)->page_number = page_number;
+	(*tlb_entry)->frame_number = frame_number;
+	(*tlb_entry)->last_used = 0;
 }

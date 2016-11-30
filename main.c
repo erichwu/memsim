@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 #define MAX_ADDRESSES 100000
-#define TEST_FILE "testinput.txt"
+#define TEST_FILE "InputFile.txt"
 
-TLB tlb;
+TLB* tlb;
 
 int combine_8_bit_numbers(uint8_t upper, uint8_t lower);
 
@@ -18,6 +18,9 @@ void init() {
 
 int main() {
   init();
+  if (tlb == NULL) {
+    printf("didn't permeate\n");
+  }
   tlb_misses = 0; page_misses = 0; total_loads = 0;
   printf("Welcome to Group 9's VM Simulator Version 1.0\n\n");
   printf("Number of logical pages: %d\n", PAGE_COUNT);
@@ -28,7 +31,8 @@ int main() {
   printf("Physical memory size: %d bytes\n", PHYSICAL_MEMORY_SIZE);
   printf("Display Physical Addresses? [yes or no] \n");
   printf("Choose TLB Replacement Strategy [1: FIFO, 2: LRU] \n");
-  int mode = 1;
+  int mode = 2;
+  int debug = 0;
   Address address;
   Address* addresses;
   int read;
@@ -36,9 +40,9 @@ int main() {
   int i;
   for (i = 0; i < read; i++) {
     FrameValue frame_value;
-    printf("Looking up address, %u in tlb\n", combine_8_bit_numbers(addresses[i].page_number, addresses[i].offset));
-    tlb_get(&tlb, addresses[i], mode, &frame_value);
-    printf("Found frame value %u from address %u %u\n", frame_value, addresses[i].page_number, addresses[i].offset);
+    if(debug) printf("Looking up address, %u in tlb\n", combine_8_bit_numbers(addresses[i].page_number, addresses[i].offset));
+    tlb_get(tlb, addresses[i], mode, &frame_value);
+    if(debug) printf("Found frame value %u from address %u %u\n", frame_value, addresses[i].page_number, addresses[i].offset);
     total_loads++;
   }
   double page_miss_percentage = (double) page_misses / (double) total_loads * 100;
