@@ -14,7 +14,6 @@ void frame_block_init(FrameBlock** block) {
 	}
 }
 
-/** Initialize Memory members*/
 void memory_init(PhysicalMemory** memory) {
 	(*memory) = malloc(sizeof(PhysicalMemory));
 	(*memory)->backing_store_pointer = fopen(BACKING_STORE_FILE, "rb");
@@ -29,7 +28,6 @@ void memory_init(PhysicalMemory** memory) {
 	}
 }
 
-/** Return frame number of loaded memory after loading available position */
 int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number) {
 	//Offset is an n bit value. This can only represent 2^n values.
 	//That's fine. We can map the 2^n values to the 2^(2*n) values by doing
@@ -57,8 +55,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 
 int memory_get(PhysicalMemory* memory, FrameNumber frame_number, Offset offset, FrameValue* frame_value) {
 	if(memory->table[frame_number] != NULL) {
-		//stuck here. How does a particular offset get a particular byte of the 256 bytes?
-		*frame_value = memory->table[frame_number]->table[offset]; //???????????????????????
+		*frame_value = memory->table[frame_number]->table[offset]; 
 		return 0;
 	} else {
 		printf("SOMTHING WRONG trying to access frame num %u\n", frame_number);

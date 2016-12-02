@@ -6,20 +6,29 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* We're making the assumption that the input file will not
+ * exceed 100000 lines. It may need to be increased, though.
+*/
 #define MAX_ADDRESSES 100000
+/* The input file with virtual addresses*/
 #define TEST_FILE "InputFile.txt"
+/* The output file of the program*/
 #define OUTPUT_FILE "vm_sim_output.txt"
 
 TLB* tlb;
 
+/** Combine two bit bit numbers into a 16 bit number*/
 int combine_8_bit_numbers(uint8_t upper, uint8_t lower);
 
+/** Parse TEST_FILE virtual addresses to logical addresses*/
 int read_file(Address** addresses, int* read);
 
+/** Intialize our TLB member*/
 void init() {
   tlb_init(&tlb);
 }
 
+/** Give user running options and handle file input and output*/
 int main() {
   init();
   FILE* output_file_pointer = fopen(OUTPUT_FILE, "w");
@@ -77,11 +86,6 @@ int main() {
   printf("Check the results in the outputfile: vm_sim_output.txt\n\n");
 }
 
-// read_file containing 32-bit addresses.
-//
-// Results are stored in the addresses parameter.
-//
-// The length of the addresses array is stored in the read parameter.
 int read_file(Address** addresses, int* read) {
   Address stored[MAX_ADDRESSES];
   FILE* file_pointer;

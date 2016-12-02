@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <time.h>
 
+
 /**
 	* TLBEntry within the TLB table.
 	* Has a page_number, frame_number, and valid_bit members
@@ -15,9 +16,13 @@
 	*
 	*/
 typedef struct {
+	/** The page number of the TLB entry*/
 	PageNumber page_number;
+	/** The frame number of an entry*/
 	FrameNumber frame_number;
+	/** Unused valid bit for processes to check if it's read/writeable*/
 	ValidBit valid_bit;
+	/** Implementation detail for LRU*/
 	int last_used;
 } TLBEntry;
 
@@ -28,9 +33,13 @@ typedef struct {
 	* strategy.
 	*/
 typedef struct {
+	/** Table of TLB entries*/
 	TLBEntry* table[TLB_ENTRIES];
+	/** Reference to physical memory for memory calls*/
 	PhysicalMemory* main_memory;
+	/** Reference to page_table for page calls*/
 	Page* page_table;
+	/** Modded index to determine the index of the oldest inserted entry*/
 	int first_in;
 } TLB;
 

@@ -3,6 +3,7 @@
 #include "parser.h"
 
 uint16_t make_uint16_t(uint32_t address) {
+  //"bit mask" truncates top 16 bits
   return (uint16_t) address;
 }
 

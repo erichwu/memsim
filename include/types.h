@@ -3,6 +3,15 @@
 
 #include <stdint.h>
 
+/*
+ * Our types file defines that set out the limits of our virtual 
+ * memory simulator.
+ *
+ * Defines types, errors, and operation modes.
+ * Modify this file carefully as it may break everything.
+ *
+ */
+
 /** TLB_MISS indicates an entry is not in the TLB*/
 #define TLB_MISS -1
 /** PAGE_MISS indicates an entry is not in the page table*/
@@ -51,14 +60,5 @@ typedef struct {
   PageNumber page_number;
   Offset offset;
 } Address;
-
-/**
- * The PhysicalAddress struct
- * Contains the frame_number and offset.
- */
-typedef struct {
-	FrameNumber frame_number;
-	Offset offset;
-} PhysicalAddress;
 
 #endif
