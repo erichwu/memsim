@@ -49,14 +49,8 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	FrameBlock* block = malloc(sizeof(FrameBlock));
 	frame_block_init(&block);
 	for (i = 0; i < FRAME_SIZE; i++) {
-		//Loading a byte of data from the backing store into the frame block.
-		/*if(byte[i] == NULL) {
-			printf("bad\n");
-			exit(1);
-		}*/
 		block->table[i] = byte[i];
 	}
-	printf("\n");
 	memory->table[*frame_number] = block;
 	return 0;
 }

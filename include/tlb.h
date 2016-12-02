@@ -41,10 +41,10 @@ void tlb_init(TLB** tlb);
 int tlb_scan(TLB* tlb, Address address, FrameNumber* frame_number);
 
 /** 
-	* Get a particular frame value from a address. Handles faults. 
+	* Get a particular frame value and frame number from a address. Handles faults. 
   * Returns value in frame_value parameter
   */
-int tlb_get(TLB* tlb, Address address, int mode, FrameValue* frame_value);
+int tlb_get(TLB* tlb, Address address, int mode, FrameNumber* frame_number, FrameValue* frame_value);
 
 /**
 	* Replace an entry in the TLB using the FIFO strategy.

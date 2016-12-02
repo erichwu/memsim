@@ -25,14 +25,13 @@ int tlb_scan(TLB* tlb, Address address, FrameNumber* frame_number) {
 	return TLB_MISS;
 }
 
-int tlb_get(TLB* tlb, Address address, int mode, FrameValue* frame_value) {
-	FrameNumber frame_number;
-	if (tlb_scan(tlb, address, &frame_number) == TLB_MISS) {
-		page_get(tlb->page_table, address, &frame_number);
+int tlb_get(TLB* tlb, Address address, int mode, FrameNumber* frame_number, FrameValue* frame_value) {
+	if (tlb_scan(tlb, address, frame_number) == TLB_MISS) {
+		page_get(tlb->page_table, address, frame_number);
 		if (mode == FIFO) {
-			tlb_replace_fifo(tlb, address, frame_number);
+			tlb_replace_fifo(tlb, address, *frame_number);
 		} else if (mode == LRU) {
-			tlb_replace_lru(tlb, address, frame_number);
+			tlb_replace_lru(tlb, address, *frame_number);
 		} else {
 			printf("Operation mode isn't available\n");
 			exit(-1);
@@ -40,7 +39,7 @@ int tlb_get(TLB* tlb, Address address, int mode, FrameValue* frame_value) {
 		tlb_misses++;
 	}
 	//Go to memory
-	if (memory_get(tlb->main_memory, frame_number, address.offset, frame_value) == SOMETHING_IS_WRONG) {
+	if (memory_get(tlb->main_memory, *frame_number, address.offset, frame_value) == SOMETHING_IS_WRONG) {
 		printf("Undefined physical memory issue caught in tlb_get\n");
 		exit(-1);
 	}
