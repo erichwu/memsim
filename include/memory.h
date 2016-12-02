@@ -8,7 +8,7 @@
 
 /** The contents of a single "frame"*/
 typedef struct {
-	uint8_t* table[FRAME_SIZE];
+	uint8_t table[FRAME_SIZE];
 } FrameBlock;
 
 /** The physical memory which stores our blocks of data*/

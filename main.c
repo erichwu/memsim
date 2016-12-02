@@ -32,7 +32,7 @@ int main() {
   printf("Display Physical Addresses? [yes or no] \n");
   printf("Choose TLB Replacement Strategy [1: FIFO, 2: LRU] \n");
   int mode = 2;
-  int debug = 0;
+  int debug = 1;
   Address address;
   Address* addresses;
   int read;
@@ -40,9 +40,8 @@ int main() {
   int i;
   for (i = 0; i < read; i++) {
     FrameValue frame_value;
-    if(debug) printf("Looking up address, %u in tlb\n", combine_8_bit_numbers(addresses[i].page_number, addresses[i].offset));
     tlb_get(tlb, addresses[i], mode, &frame_value);
-    if(debug) printf("Found frame value %u from address %u %u\n", frame_value, addresses[i].page_number, addresses[i].offset);
+    if(debug) printf("Found frame value %u\n", frame_value);
     total_loads++;
   }
   double page_miss_percentage = (double) page_misses / (double) total_loads * 100;

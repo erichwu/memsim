@@ -10,14 +10,14 @@
 void frame_block_init(FrameBlock** block) {
 	int i;
 	for (i = 0; i < FRAME_SIZE; i++) {
-		(*block)->table[i] = NULL;
+		// (*block)->table[i] = NULL;
 	}
 }
 
 /** Initialize Memory members*/
 void memory_init(PhysicalMemory** memory) {
 	(*memory) = malloc(sizeof(PhysicalMemory));
-	(*memory)->backing_store_pointer = fopen(BACKING_STORE_FILE, "r");
+	(*memory)->backing_store_pointer = fopen(BACKING_STORE_FILE, "rb");
   if ((*memory)->backing_store_pointer == NULL) {
   	printf("Backing store '%s' file is invalid\n", BACKING_STORE_FILE);
   	exit(-1);
@@ -37,7 +37,7 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	if (lseek(memory->backing_store_fd, offset * FRAME_SIZE, SEEK_SET) == -1) {
 		return SOMETHING_IS_WRONG;
 	}
-	char* byte[FRAME_SIZE];
+	char byte[FRAME_SIZE];
 	if (fread(byte, 1, FRAME_SIZE, memory->backing_store_pointer) != FRAME_SIZE) {
 		return SOMETHING_IS_WRONG;
 	}
@@ -50,8 +50,13 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 	frame_block_init(&block);
 	for (i = 0; i < FRAME_SIZE; i++) {
 		//Loading a byte of data from the backing store into the frame block.
+		/*if(byte[i] == NULL) {
+			printf("bad\n");
+			exit(1);
+		}*/
 		block->table[i] = byte[i];
 	}
+	printf("\n");
 	memory->table[*frame_number] = block;
 	return 0;
 }
@@ -59,8 +64,10 @@ int memory_load(PhysicalMemory* memory, Offset offset, FrameNumber* frame_number
 int memory_get(PhysicalMemory* memory, FrameNumber frame_number, Offset offset, FrameValue* frame_value) {
 	if(memory->table[frame_number] != NULL) {
 		//stuck here. How does a particular offset get a particular byte of the 256 bytes?
-		frame_value = memory->table[frame_number]->table[offset]; //???????????????????????
+		*frame_value = memory->table[frame_number]->table[offset]; //???????????????????????
 		return 0;
+	} else {
+		printf("SOMTHING WRONG trying to access frame num %u\n", frame_number);
+		return SOMETHING_IS_WRONG;
 	} 
-	return SOMETHING_IS_WRONG;
 }

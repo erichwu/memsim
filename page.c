@@ -11,6 +11,8 @@ int page_get(Page* page_table, Address address, FrameNumber* frame_number) {
 			printf("Error with memory caught in page_get\n");
 			exit(1);
 		}
+		page_table->table[address.page_number] = frame_number;
+		//printf("PAGE MISSED");
 		page_misses++;
 	}
 	return 0;

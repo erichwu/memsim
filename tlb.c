@@ -26,7 +26,6 @@ int tlb_scan(TLB* tlb, Address address, FrameNumber* frame_number) {
 }
 
 int tlb_get(TLB* tlb, Address address, int mode, FrameValue* frame_value) {
-	printf("TLB get called with address %u, %u\n", address.page_number, address.offset);
 	FrameNumber frame_number;
 	if (tlb_scan(tlb, address, &frame_number) == TLB_MISS) {
 		page_get(tlb->page_table, address, &frame_number);
