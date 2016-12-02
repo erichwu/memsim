@@ -14,7 +14,7 @@ TLB* tlb;
 
 int combine_8_bit_numbers(uint8_t upper, uint8_t lower);
 
-nt read_file(Address** addresses, int* read);
+int read_file(Address** addresses, int* read);
 
 void init() {
   tlb_init(&tlb);
